@@ -44,14 +44,16 @@ def getColName(colIndx):
         return "g"
     elif colIndx == 3:
         return "t"
+    return "-"
         
 def getMutation(x, probList):
     val = probList[0]
-    for i in range(1, len(probList)):
+    for i in range(1, len(probList) + 1):
         if x < val:
-            print ("i: %d, x: %.4f, val: %.4f" % (i,x,val) )
+            #print ("i: %d, x: %.4f, val: %.4f" % (i,x,val) )
             return getColName(i-1)
         val += probList[i]
+    print ("i: %d, x: %.4f, val: %.4f" % (i,x,val) )
 
 def mutateSequence(seq, probMatrix):
     for i in range(0, len(seq)):
@@ -63,8 +65,8 @@ def mutateSequence(seq, probMatrix):
         elif seq[i] == "g":
             seq[i] = getMutation(x, probMatrix[2])
         elif seq[i] == "t":
-            print (probMatrix[3])
             seq[i] = getMutation(x, probMatrix[3])
+        
         
     return seq
     
