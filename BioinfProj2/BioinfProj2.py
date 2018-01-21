@@ -1,4 +1,5 @@
 from math import *
+import numpy as np
 
 letters = ["A", "C", "G", "T"]
 
@@ -45,24 +46,14 @@ fo = open(fileName, "r+")
 seq2 = fo.read();
 fo.close()
 
-#fileName = input("Podaj nazwę pliku z macierzą częstości ")
-#fo = open(fileName, "r+")
-#rateMatrix = fo.read();
-#fo.close()
+fileName = input("Podaj nazwę pliku z macierzą częstości ")
+rateMatrix = np.loadtxt(fileName, dtype='f', delimiter=' ')
+
+a = rateMatrix[0][1]
+b = rateMatrix[0][2]
 
 timePeriodStart = int(input("Podaj początek przedziału czasu "))
 timePeriodEnd = int(input("Podaj koniec przedziału czasu "))
 timePeriodInterval = float(input("Podaj wielkość odcinków czasu "))
-
-a = 0.04
-b = 0.02
-
-#seq1 = "AGCCTGAACCGTT"
-#seq2 = "GCATAAGGTTCCA"
-
-#timePeriodStart = 1
-#timePeriodEnd = 20
-#timePeriodLength = timePeriodEnd - timePeriodStart
-#timePeriodInterval = 0.1
 
 FindMostProbableEvolutionTime(seq1, seq2, a, b, timePeriodStart, timePeriodEnd, timePeriodInterval)
