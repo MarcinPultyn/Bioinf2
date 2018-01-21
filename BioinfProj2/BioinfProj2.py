@@ -1,5 +1,12 @@
 from math import *
 
+letters = ["A", "C", "G", "T"]
+
+def my_range(start, end, step):
+    while start <= end:
+        yield start
+        start += step
+
 def GetProbabilitiesMatrix(a, b, t):
     x = 1/4.0 + 1/4.0 * exp(-4*b*t) + 1/2.0 * exp(-2 * (a+b) * t)
     y = 1/4.0 + 1/4.0 * exp(-4*b*t) - 1/2.0 * exp(-2 * (a+b) * t)
@@ -10,36 +17,52 @@ def GetProbabilitiesMatrix(a, b, t):
     matrix = [[p, q, r, r], [q, p, r, r], [r, r, p, q], [r, r, q, p]]
     return matrix
 
+def FindMostProbableEvolutionTime(seq1, seq2, alfa, beta, timePeriodStart, timePeriodEnd, timePeriodInterval):
+    probabilities = []
+
+    for i in my_range(timePeriodStart, timePeriodEnd, timePeriodInterval):
+        matrix = GetProbabilitiesMatrix(a, b, i)
+        probabilityTemp = 1
+        for j in range(0, len(seq1)):
+            x = letters.index(seq1[j])
+            y = letters.index(seq2[j])
+            probabilityTemp *= matrix[x][y]
+        probabilities.append(probabilityTemp)
+
+    maxProbability = max(probabilities)
+    maxProbIndex = probabilities.index(maxProbability)
+    maxProbTime = maxProbIndex * timePeriodInterval + timePeriodStart
+
+    print("Najbardziej prawdopodobny czas ewolucji: ", maxProbTime)
+    print("Prawdopodobieństwo: ", maxProbability)
+
+fileName = input("Podaj nazwę pliku z pierwszą sekwencją ")
+fo = open(fileName, "r+")
+seq1 = fo.read();
+fo.close()
+fileName = input("Podaj nazwę pliku z drugą sekwencją ")
+fo = open(fileName, "r+")
+seq2 = fo.read();
+fo.close()
+
+#fileName = input("Podaj nazwę pliku z macierzą częstości ")
+#fo = open(fileName, "r+")
+#rateMatrix = fo.read();
+#fo.close()
+
+timePeriodStart = int(input("Podaj początek przedziału czasu "))
+timePeriodEnd = int(input("Podaj koniec przedziału czasu "))
+timePeriodInterval = float(input("Podaj wielkość odcinków czasu "))
+
 a = 0.04
 b = 0.02
 
-t = 1
+#seq1 = "AGCCTGAACCGTT"
+#seq2 = "GCATAAGGTTCCA"
 
-GetProbabilitiesMatrix(a, b, t)
+#timePeriodStart = 1
+#timePeriodEnd = 20
+#timePeriodLength = timePeriodEnd - timePeriodStart
+#timePeriodInterval = 0.1
 
-letters = ["A", "C", "G", "T"]
-
-seq1 = "AGCCTGAACCGTT"
-seq2 = "GCATAAGGTTCCA"
-
-timePeriodStart = 1
-timePeriodEnd = 20
-timePeriodLength = timePeriodEnd - timePeriodStart
-
-probabilities = []
-
-for i in range(timePeriodStart, timePeriodEnd):
-    matrix = GetProbabilitiesMatrix(a, b, i)
-    probabilityTemp = 1
-    for j in range(0, len(seq1)):
-        x = letters.index(seq1[j])
-        y = letters.index(seq2[j])
-        probabilityTemp *= matrix[x][y]
-    probabilities.append(probabilityTemp)
-
-maxProbability = max(probabilities)
-maxProbIndex = probabilities.index(maxProbability)
-maxProbTime = maxProbIndex + timePeriodStart
-
-print("Most probable time of evolution: ", maxProbTime)
-print("Probability: ", maxProbability)
+FindMostProbableEvolutionTime(seq1, seq2, a, b, timePeriodStart, timePeriodEnd, timePeriodInterval)
