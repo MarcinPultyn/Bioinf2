@@ -1,5 +1,6 @@
 from math import *
 import random
+import numpy as np
 
 def getProbabilitiesMatrix1(a, b, t):
     x = 1/4.0 + 1/4.0 * exp(-4*b*t) + 1/2.0 * exp(-2 * (a+b) * t)
@@ -49,15 +50,18 @@ def getColName(colIndx):
 def getMutation(x, probList):
     val = probList[0]
     for i in range(1, len(probList) + 1):
-        if x < val:
-            #print ("i: %d, x: %.4f, val: %.4f" % (i,x,val) )
+        if x <= val:
+            print ("i: %d, x: %.4f, val: %.4f" % (i,x,val) )
             return getColName(i-1)
         val += probList[i]
     print ("i: %d, x: %.4f, val: %.4f" % (i,x,val) )
 
 def mutateSequence(seq, probMatrix):
+    print("start\n")
+    random.seed()
     for i in range(0, len(seq)):
         x = random.random()
+        print("x: %.5f" % x)
         if seq[i] == "a":
             seq[i] = getMutation(x, probMatrix[0])
         elif seq[i] == "c":
@@ -76,32 +80,35 @@ seqLength = 25
 
 t = int(input("Podaj czas t "))
 seq = randomDnaSequence(seqLength)
-seq1 = seq2 = list(seq)
+seq1 = list(seq)
+seq2 = list(seq)
 print (seq)
-print ("\n seq: \n")
+print ("\n oryg seq: \n")
 print (seq1)
-print ("\n")
-print (seq1[0])
+
 getRMatrix(a, b)
 getProbabilitiesMatrix1(a, b, t)
 probMatrix = getProbabilitiesMatrix(a, b, t)
 retSeq1 = mutateSequence(seq1, probMatrix)
 retSeq2 = mutateSequence(seq2, probMatrix)
 print ("out seq: \n")
-print (retSeq1)
+print (''.join(retSeq1))
 print ("\n")
-print (retSeq2)
+print (''.join(retSeq2))
 
 file = open("seq1.txt","w") 
-file.write(''.join(seq1)) 
+file.write(''.join(retSeq1)) 
 file.close()
 
 file = open("seq2.txt","w")  
-file.write(''.join(seq2)) 
+file.write(''.join(retSeq2)) 
 file.close()
 
-file = open("matrix.txt","w") 
-file.write(''.join(probMatrix))
-file.close()
+a = np.array(probMatrix)
+mat = np.matrix(a)
+with open('outfile.txt','wb') as f:
+    for line in mat:
+        np.savetxt(f, line, fmt='%.2f')
+    
 
         
