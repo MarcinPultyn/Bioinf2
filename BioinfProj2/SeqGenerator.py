@@ -10,14 +10,14 @@ def getProbabilitiesMatrix1(a, b, t):
     q = y
     r = z
     matrix = [[p, q, r, r], [q, p, r, r], [r, r, p, q], [r, r, q, p]]
-    print ('Prob matrix: \n')
+    print ('Prob matrix: ')
     print (matrix)
     return matrix
 
 def getRMatrix(a, b):
     r = (-2*b)-a
     matrix = [[r, b, a, b], [b, r, b, a], [a, b, r, b], [b, a, b, r]]
-    print ("R matrix: \n")
+    print ("R matrix: ")
     print (matrix)
     return matrix
 
@@ -27,48 +27,47 @@ def getProbabilitiesMatrix(a, b, t):
     rt = 1 - 2*st - ut
     
     matrix = [[rt, st, ut, st], [st, rt, st, ut], [ut, st, rt, st], [st, ut, st, rt]]
-    print ("Prob matrix1: \n")
+    print ("Prob matrix1: ")
     print (matrix)
     return matrix
 
 def randomDnaSequence(length, actg_distribution=None):
     if (actg_distribution == None):
-        actg_distribution = ''.join(random.choice('cgta') for _x in range(7))
+        actg_distribution = ''.join(random.choice('CGTA') for _x in range(7))
     return ''.join(random.choice(actg_distribution) for _x in range(length))
 
 def getColName(colIndx):
     if colIndx == 0:
-        return "a"
+        return "A"
     elif colIndx == 1:
-        return "c"
+        return "C"
     elif colIndx == 2:
-        return "g"
+        return "G"
     elif colIndx == 3:
-        return "t"
+        return "T"
     return "-"
         
 def getMutation(x, probList):
     val = probList[0]
     for i in range(1, len(probList) + 1):
         if x <= val:
-            print ("i: %d, x: %.4f, val: %.4f" % (i,x,val) )
+            #print ("i: %d, x: %.4f, val: %.4f" % (i,x,val) )
             return getColName(i-1)
         val += probList[i]
-    print ("i: %d, x: %.4f, val: %.4f" % (i,x,val) )
+    #print ("i: %d, x: %.4f, val: %.4f" % (i,x,val) )
 
 def mutateSequence(seq, probMatrix):
-    print("start\n")
+
     random.seed()
     for i in range(0, len(seq)):
         x = random.random()
-        print("x: %.5f" % x)
-        if seq[i] == "a":
+        if seq[i] == "A":
             seq[i] = getMutation(x, probMatrix[0])
-        elif seq[i] == "c":
+        elif seq[i] == "C":
             seq[i] = getMutation(x, probMatrix[1])
-        elif seq[i] == "g":
+        elif seq[i] == "G":
             seq[i] = getMutation(x, probMatrix[2])
-        elif seq[i] == "t":
+        elif seq[i] == "T":
             seq[i] = getMutation(x, probMatrix[3])
         
         
@@ -82,16 +81,17 @@ t = int(input("Podaj czas t "))
 seq = randomDnaSequence(seqLength)
 seq1 = list(seq)
 seq2 = list(seq)
+print ("\n oryg seq: ")
 print (seq)
-print ("\n oryg seq: \n")
-print (seq1)
+
+
 
 getRMatrix(a, b)
 getProbabilitiesMatrix1(a, b, t)
 probMatrix = getProbabilitiesMatrix(a, b, t)
 retSeq1 = mutateSequence(seq1, probMatrix)
 retSeq2 = mutateSequence(seq2, probMatrix)
-print ("out seq: \n")
+print ("out seq: ")
 print (''.join(retSeq1))
 print ("\n")
 print (''.join(retSeq2))
@@ -106,9 +106,12 @@ file.close()
 
 a = np.array(probMatrix)
 mat = np.matrix(a)
-with open('outfile.txt','wb') as f:
+print (mat)
+with open('probMatrix.txt','wb') as f:
     for line in mat:
-        np.savetxt(f, line, fmt='%.2f')
-    
-
+        np.savetxt(f, line, fmt='%.8f')
+ 
+#reading matrix 
+#input = np.loadtxt("probMatrix.txt", dtype='f', delimiter=' ')
+#print(input)
         
