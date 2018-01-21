@@ -1,7 +1,18 @@
 from math import *
 import numpy as np
+from decimal import Decimal
 
 letters = ["A", "C", "G", "T"]
+
+def kimuraDistance(st, ut):
+    p=ut
+    q=2*st
+    d = Decimal(1-(2*p)-q)
+    d1 = Decimal(1-(2*q))
+    dd = d.ln()
+    dd1 = d1.ln()
+    return ((-(float(dd))/2)-((float(dd1))/4))
+   
 
 def my_range(start, end, step):
     while start <= end:
@@ -56,4 +67,24 @@ timePeriodStart = int(input("Podaj początek przedziału czasu "))
 timePeriodEnd = int(input("Podaj koniec przedziału czasu "))
 timePeriodInterval = float(input("Podaj wielkość odcinków czasu "))
 
+#a = 0.04
+#b = 0.02
+
+#seq1 = "AGCCTGAACCGTT"
+#seq2 = "GCATAAGGTTCCA"
+
+#timePeriodStart = 1
+#timePeriodEnd = 20
+#timePeriodLength = timePeriodEnd - timePeriodStart
+#timePeriodInterval = 0.1
+
 FindMostProbableEvolutionTime(seq1, seq2, a, b, timePeriodStart, timePeriodEnd, timePeriodInterval)
+
+input = np.loadtxt("probMatrix.txt", dtype='f', delimiter=' ')
+st = input[0][1]
+ut = input[0][2]
+print ("st %f , ut %f" % (st, ut))
+kimD = kimuraDistance(st, ut)
+print ("Kimura Distance: ", kimD)
+t = kimD/(a+2*b)
+print ("time: ", t)
