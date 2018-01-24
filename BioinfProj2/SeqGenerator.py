@@ -79,39 +79,34 @@ seqLength = 25
 
 t = int(input("Podaj czas t "))
 seq = randomDnaSequence(seqLength)
-seq1 = list(seq)
-seq2 = list(seq)
+originalSeq = list(seq)
+seqCopy = list(seq)
 print ("\n oryg seq: ")
 print (seq)
 
-
-
-getRMatrix(a, b)
+rateMatrix = getRMatrix(a, b)
 getProbabilitiesMatrix1(a, b, t)
 probMatrix = getProbabilitiesMatrix(a, b, t)
-retSeq1 = mutateSequence(seq1, probMatrix)
-retSeq2 = mutateSequence(seq2, probMatrix)
+mutatedSeq = mutateSequence(seqCopy, probMatrix)
 print ("out seq: ")
-print (''.join(retSeq1))
-print ("\n")
-print (''.join(retSeq2))
+print (''.join(mutatedSeq))
 
 file = open("seq1.txt","w") 
-file.write(''.join(retSeq1)) 
+file.write(''.join(originalSeq)) 
 file.close()
 
 file = open("seq2.txt","w")  
-file.write(''.join(retSeq2)) 
+file.write(''.join(mutatedSeq)) 
 file.close()
 
-a = np.array(probMatrix)
+a = np.array(rateMatrix)
 mat = np.matrix(a)
 print (mat)
-with open('probMatrix.txt','wb') as f:
+with open('rateMatrix.txt','wb') as f:
     for line in mat:
         np.savetxt(f, line, fmt='%.8f')
  
 #reading matrix 
-#input = np.loadtxt("probMatrix.txt", dtype='f', delimiter=' ')
+#input = np.loadtxt("rateMatrix.txt", dtype='f', delimiter=' ')
 #print(input)
         
